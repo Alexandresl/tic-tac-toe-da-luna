@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tic Tac Toe da Luna</title>
+  <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="style/animate.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Tic Tac Toe da Luna</h1>
+    </header>
+    <main>
+      <table>
+        <tr>
+          <td id="cel1" onclick="play(this.id)"><img src="img/jogador0.png"></td>
+          <td id="cel2" onclick="play(this.id)"><img src="img/jogador0.png"></td>
+          <td id="cel3" onclick="play(this.id)"><img src="img/jogador0.png"></td>
+        </tr>
+        <tr>
+          <td id="cel4" onclick="play(this.id)"><img src="img/jogador0.png"></td>
+          <td id="cel5" onclick="play(this.id)"><img src="img/jogador0.png"></td>
+          <td id="cel6" onclick="play(this.id)"><img src="img/jogador0.png"></td>
+        </tr>
+        <tr>
+          <td id="cel7" onclick="play(this.id)"><img src="img/jogador0.png"></td>
+          <td id="cel8" onclick="play(this.id)"><img src="img/jogador0.png"></td>
+          <td id="cel9" onclick="play(this.id)"><img src="img/jogador0.png"></td>
+        </tr>
+      </table>
+    </main>
+    <aside>
+      <div id="whoStarts"></div>
+      <button onclick="start()">Iniciar Jogo</button>
+    </aside>
+    <footer>
+      
+    </footer>
+  </div>
+  <script src="script/script.js"></script>
+</body>
+</html>
