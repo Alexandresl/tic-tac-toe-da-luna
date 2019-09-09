@@ -1,45 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Tic Tac Toe da Luna</title>
-  <link rel="stylesheet" href="style/style.css">
-  <link rel="stylesheet" href="style/animate.css">
+  <title>Tic-Tac-Toe da Luna</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+  <link rel="stylesheet" href="./style/style.css">
 </head>
+
 <body>
   <div class="container">
     <header>
-      <h1>Tic Tac Toe da Luna</h1>
+      <div class="Badge">Tic-Tac-Toe da Luna</div>
     </header>
-    <main>
-      <table>
+    <div class="buttonFunctions">
+      <div id="whoStarts"></div>
+      <div id="whoPlay"></div>
+      <div id="whoWin"></div>
+      <div id="buttonGroup">
+        <button class="audioEl"></button>
+        <button class="machineEl"></button>
+        <button class="levelEl" onclick="start()"></button>
+      </div>
+    </div>
+    <div class="content">
+      <div id="selectCharacter">
+        <h2>Selecione seu personagem:</h2>
+        <div class="character">
+          <img src="assets/images/jogador1luna.png" id="luna" onclick="start(this.id)">
+          <img src="assets/images/jogador2luna.png" id="claudio" onclick="start(this.id)">
+        </div>
+      </div>
+      <table id="board">
         <tr>
-          <td id="cel1" onclick="play(this.id)"><img src="img/jogador0.png"></td>
-          <td id="cel2" onclick="play(this.id)"><img src="img/jogador0.png"></td>
-          <td id="cel3" onclick="play(this.id)"><img src="img/jogador0.png"></td>
+          <td id="cel1" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
+          <td id="cel2" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
+          <td id="cel3" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
         </tr>
         <tr>
-          <td id="cel4" onclick="play(this.id)"><img src="img/jogador0.png"></td>
-          <td id="cel5" onclick="play(this.id)"><img src="img/jogador0.png"></td>
-          <td id="cel6" onclick="play(this.id)"><img src="img/jogador0.png"></td>
+          <td id="cel4" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
+          <td id="cel5" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
+          <td id="cel6" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
         </tr>
         <tr>
-          <td id="cel7" onclick="play(this.id)"><img src="img/jogador0.png"></td>
-          <td id="cel8" onclick="play(this.id)"><img src="img/jogador0.png"></td>
-          <td id="cel9" onclick="play(this.id)"><img src="img/jogador0.png"></td>
+          <td id="cel7" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
+          <td id="cel8" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
+          <td id="cel9" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
         </tr>
       </table>
-    </main>
-    <aside>
-      <div id="whoStarts"></div>
-      <button onclick="start()">Iniciar Jogo</button>
-    </aside>
+    </div>
     <footer>
-      
+      este é o footer!
     </footer>
   </div>
-  <script src="script/script.js"></script>
+  <script src="./assets/scripts/scripts.js"></script>
 </body>
+
 </html>
