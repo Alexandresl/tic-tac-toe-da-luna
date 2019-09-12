@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
@@ -15,22 +15,23 @@
     <header>
       <div class="Badge">Tic-Tac-Toe da Luna</div>
     </header>
+    <div id="whoStarts"></div>
+    <div id="whoPlay"></div>
+    <div id="whoWin"></div>
     <div class="buttonFunctions">
-      <div id="whoStarts"></div>
-      <div id="whoPlay"></div>
-      <div id="whoWin"></div>
       <div id="buttonGroup">
-        <button class="audioEl"></button>
-        <button class="machineEl"></button>
-        <button class="levelEl" onclick="start()"></button>
+        <button class="audioElOn" onclick="toggleAudio()" onmouseover="playEffectHomeFunc()"></button>
+        <button class="machineEl" onmouseover="playEffectHomeFunc()"></button>
+        <button class="levelEl1" onclick="level()" onmouseover="playEffectHomeFunc()"></button>
+        <button class="playEl disabled" onclick="start()" disabled ></button>
       </div>
     </div>
     <div class="content">
       <div id="selectCharacter">
         <h2>Selecione seu personagem:</h2>
         <div class="character">
-          <img src="assets/images/jogador1luna.png" id="luna" onclick="start(this.id)">
-          <img src="assets/images/jogador2luna.png" id="claudio" onclick="start(this.id)">
+          <img src="assets/images/jogador1luna.png" id="luna" onclick="start(this.id)" onmouseover="playEffectHomeFunc()">
+          <img src="assets/images/jogador2luna.png" id="claudio" onclick="start(this.id)" onmouseover="playEffectHomeFunc()">
         </div>
       </div>
       <table id="board">
@@ -52,7 +53,7 @@
       </table>
     </div>
     <footer>
-      este é o footer!
+      Alexandre Lima
     </footer>
   </div>
   <script src="./assets/scripts/scripts.js"></script>

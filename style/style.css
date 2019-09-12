@@ -4,22 +4,10 @@
 }
 
 .container {
+  position: relative;
   display: grid;
   grid-template: 'header''buttons''play''footer';
   grid-template-rows: 10vh 15vh 65vh 10vh;
-}
-
-@media (max-width: 575.98px) {
-  .container {
-    display: grid;
-    grid-template: 'header''play''buttons''footer';
-    grid-template-rows: 10vh 65vh 15vh 10vh;
-  }
-
-  .buttonFunctions {
-    justify-self: center;
-
-  }
 }
 
 body {
@@ -46,7 +34,7 @@ header {
 
 .Badge {
   font-family: wildma, Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 60px;
+  font-size: 4em;
   color: #fff;
   text-shadow: 0 0 5px #2B2768, 0 0 6px #FF6400;
 }
@@ -61,10 +49,12 @@ header {
   justify-self: right;
 }
 
-#whoStarts, #whoPlay, #whoWin {
+#whoStarts,
+#whoPlay,
+#whoWin {
   position: absolute;
-  top: 100;
-  left: 0;
+  top: 90px;
+  left: 100;
   padding: 5px 20px;
   background: #fff;
   text-align: center;
@@ -76,19 +66,29 @@ header {
   display: none;
 }
 
-.audioEl,
+.audioElOn,
+.audioElOff,
 .machineEl,
-.levelEl {
+.levelEl1,
+.levelEl2,
+.levelEl3,
+.playEl {
   width: 80px;
   height: 80px;
   background: none;
   border: none;
   margin: 0 10px;
+  cursor: pointer;
 }
 
 
-.audioEl {
+.audioElOn {
   background-image: url('../assets/icons/audioOn.png');
+  transition: background-image .6s;
+}
+
+.audioElOff {
+  background-image: url('../assets/icons/audioOff.png');
   transition: background-image .6s;
 }
 
@@ -97,21 +97,59 @@ header {
   transition: background-image .6s;
 }
 
-.levelEl {
+.levelEl1 {
   background-image: url('../assets/icons/l1.png');
   transition: background-image .6s;
 }
 
-.audioEl:hover {
+.levelEl1:hover {
+  background-image: url('../assets/icons/l1Hover.png');
+  transition: background-image .6s;
+}
+
+.levelEl2 {
+  background-image: url('../assets/icons/l2.png');
+  transition: background-image .6s;
+}
+
+.levelEl2:hover {
+  background-image: url('../assets/icons/l2Hover.png');
+  transition: background-image .6s;
+}
+
+.levelEl3 {
+  background-image: url('../assets/icons/l3.png');
+  transition: background-image .6s;
+}
+
+.levelEl3:hover {
+  background-image: url('../assets/icons/l3Hover.png');
+  transition: background-image .6s;
+}
+
+.playEl {
+  background-image: url('../assets/icons/play.png');
+  transition: background-image .6s;
+}
+
+.playEl:hover {
+  background-image: url('../assets/icons/play_hover.png');
+  transition: background-image .6s;
+}
+
+.playEl.disabled {
+  background-image: url('../assets/icons/play_disabled.png');
+  transition: background-image .6s;
+  cursor: auto;
+}
+
+.audioElOn:hover,
+.audioElOff:hover {
   background-image: url('../assets/icons/audioOff.png');
 }
 
 .machineEl:hover {
   background-image: url('../assets/icons/robotOff.png');
-}
-
-.levelEl {
-  background-image: url('../assets/icons/l1.png');
 }
 
 /****[ Content ]****/
@@ -150,7 +188,6 @@ header {
   display: grid;
   justify-content: center;
   align-content: center;
-
 }
 
 #selectCharacter>h2 {
@@ -222,3 +259,168 @@ footer {
   color: #fff;
   text-shadow: 0 0 5px #FF6400;
 }
+
+
+
+@media (max-width: 575.98px) {
+  .container {
+    display: grid;
+    grid-template: 'header''play''buttons''footer';
+    grid-template-rows: 10vh 60vh 20vh 10vh;
+  }
+
+  .buttonFunctions {
+    justify-self: center;
+
+  }
+
+  .Badge {
+    font-size: 3em;
+  }
+
+  .content {
+    width: 60%;
+  }
+
+  #board {
+    width: 40vw;
+    height: 40vw;
+  }
+
+  #selectCharacter {
+    width: 40vw;
+    height: 40vw;
+  }
+
+
+
+  #buttonGroup {
+    justify-self: right;
+  }
+
+  #whoStarts,
+  #whoPlay,
+  #whoWin {
+    position: absolute;
+    top: 60px;
+    font-size: 18px;
+    display: none;
+  }
+
+  .audioElOn,
+  .audioElOff,
+  .machineEl,
+  .levelEl1,
+  .levelEl2,
+  .levelEl3,
+  .playEl {
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+  }
+
+
+  .audioElOn,
+  .audioElOff,
+  .machineEl,
+  .levelEl1,
+  .levelel2,
+  .levelel3,
+  .playEl {
+    background-size: 40px;
+  }
+
+}
+
+
+@media (max-width: 767.98px) {
+  .container {
+    display: grid;
+    grid-template: 'header''play''buttons''footer';
+    grid-template-rows: 10vh 60vh 20vh 10vh;
+  }
+
+  .buttonFunctions {
+    justify-self: center;
+
+  }
+
+  .Badge {
+    font-size: 3em;
+  }
+
+  .content {
+    width: 60%;
+  }
+
+  #board {
+    width: 40vw;
+    height: 40vw;
+  }
+
+  #selectCharacter {
+    width: 40vw;
+    height: 40vw;
+  }
+
+  #buttonGroup {
+    justify-self: right;
+  }
+
+  #whoStarts,
+  #whoPlay,
+  #whoWin {
+    position: absolute;
+    top: 80px;
+    font-size: 18px;
+    display: none;
+  }
+
+  .audioElOn,
+  .audioElOff,
+  .machineEl,
+  .levelEl1,
+  .levelEl2,
+  .levelEl3,
+  .playEl {
+    width: 50px;
+    height: 50px;
+    margin: 0 5px;
+  }
+
+
+  .audioElOn,
+  .audioElOff,
+  .machineEl,
+  .levelEl1,
+  .levelEl2,
+  .levelEl3,
+  .playEl {
+    background-size: 50px;
+  }
+
+
+
+}
+
+
+@media (max-width: 991.98px) {
+
+  .content {
+    width: 50%;
+  }
+
+  #board {
+    width: 35vw;
+    height: 35vw;
+  }
+
+  #selectCharacter {
+    width: 35vw;
+    height: 35vw;
+  }
+
+}
+
+
+@media (max-width: 1199.98px) {}
