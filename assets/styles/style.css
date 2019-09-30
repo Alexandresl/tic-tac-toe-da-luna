@@ -1,0 +1,363 @@
+@font-face {
+  font-family: "wildma";
+  src: url('../fonts/WILDMA__.TTF');
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  width: 100%;
+  height: 100vh;
+}
+
+ul {
+  list-style: none;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  min-height: 643px;
+  background-color: #C2A3FF;
+  background-image: url("../images/background.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+  overflow: hidden;
+}
+
+/*----[ Intro ]----*/
+
+#intro {
+  height: 96vh;
+  padding: 2vh 0;
+  display: grid;
+  justify-content: center;
+  display: none;
+}
+
+.intro-logo>img {
+  width: 60vw;
+  max-width: 300px;
+}
+
+.intro-character img {
+  width: 60vw;
+  max-width: 300px;
+}
+
+.intro-footer p {
+  font-family: "wildma";
+  font-size: 50px;
+  color: #fff;
+  text-shadow: 2px 2px 3px #CC0000;
+  text-align: center;
+  max-height: 60px;
+}
+
+.intro-loader {
+  justify-content: center;
+  align-content: center;
+  max-height: 20px;
+  background: #ffffff88;
+  border-radius: 15px;
+  border: 2px solid #fff;
+  box-shadow: 0 0 2px #CC0000;
+  display: grid;
+  opacity: 0;
+}
+
+/*----[ Container ]----*/
+
+#container {
+  /* display: none; */
+  width: 100vw;
+}
+
+main {
+  display: grid;
+  grid-template: 'header''messages''section''buttons''footer';
+  grid-template-rows: 25vh 10vh 40vh 15vh 10vh;
+  align-content: center;
+  justify-content: center;
+}
+
+
+header {
+  grid-area: header;
+  width: 100vw;
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  background-image: url('../images/logocortado.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+#messages {
+  grid-area: messages;
+  display: grid;
+  justify-content: center;
+  align-content: top;
+
+}
+
+#messages>p {
+  background: #FFFEFD;
+  text-align: center;
+  width: 50vw;
+  height: 8vh;
+  line-height: 8vh;
+  border: 1px solid #C2A3FF;
+  border-radius: 10px;
+  font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+  font-size: 0.9em;
+  color: #698F00;
+  overflow: hidden;
+  text-shadow: 1px 1px 3px #C2A3FF;
+  box-shadow: 0 3px 6px #0000007e;
+  min-width: 217px;
+}
+
+section {
+  display: grid;
+  width: 100vw;
+  align-self: center;
+  justify-self: center;
+  align-content: center;
+  justify-content: center;
+  grid-area: section;
+}
+
+#board {
+  box-sizing: content-box;
+  background: #FF6400;
+  width: 270px;
+  height: 270px;
+  border: 5px solid #fff;
+}
+
+#selectCharacter {
+  display: grid;
+  /* display: none; */
+  justify-content: center;
+  align-content: center;
+  height: 100%;
+}
+
+#selectCharacter ul {
+  width: 90%;
+  margin: 0 5%;
+}
+
+#board #selectCharacter ul li {
+  display: inline;
+  cursor: pointer;
+}
+
+#board #selectCharacter ul li img {
+  width: 49%;
+  box-sizing: border-box;
+}
+
+#board #selectCharacter ul li img:hover {
+  border: 1px solid #fff;
+  border-radius: 10px;
+  background: #ffffff4d;
+}
+
+#board table {
+  /* display: grid; */
+  display: none;
+  width: 270px;
+  height: 270px;
+}
+
+#board tr {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+}
+
+#board td {
+  background: #FF6400;
+  width: 90px;
+  height: 90px;
+  display: inline-block;
+  box-sizing: border-box;
+  border: 1px solid #fff;
+}
+
+#board td img {
+  width: 100%;
+  height: 100%;
+}
+
+.controls {
+  grid-area: buttons;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  align-content: center;
+  justify-content: center;
+  width: 60vw;
+  justify-self: center;
+}
+
+.material-icons {
+  color: white;
+}
+
+.controls ul {
+  box-sizing: content-box;
+  margin: 0 1px;
+  display: grid;
+  justify-content: center;
+}
+
+.controls ul li {
+  text-align: center;
+  font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+  color: white;
+  font-size: 20px;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.controls ul .button {
+  width: 50px;
+  height: 50px;
+  background: #FF6400;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-sizing: border-box;
+  display: grid;
+  align-self: center;
+  justify-self: center;
+  align-content: center;
+  justify-content: center;
+  cursor: pointer;
+  text-shadow: none;
+  box-shadow: 1px 1px 5px #000;
+}
+
+.button i {
+  font-size: 30px;
+}
+
+.controls select {
+  background: #FF6400;
+  border: 3px solid #fff;
+  border-radius: 25px;
+  height: 50px;
+  width: 50px;
+  color: #fff;
+  font-size: 24px;
+  text-align: center;
+  box-shadow: 1px 1px 5px #000;
+}
+
+#play.disabled,
+#labelPlay.disabled {
+  display: none;
+}
+
+#whoStarts,
+#whoPlay,
+#whoWin {
+  display: none;
+}
+
+footer {
+  grid-area: footer;
+  display: grid;
+  text-align: center;
+  font-family: 'wildma', Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+  color: #000;
+  text-shadow: 1px 1px 1px #fff;
+  justify-content: center;
+  align-content: center;
+}
+
+footer ul {
+  width: 60vw;
+  font-size: 12px;
+}
+
+footer ul li:last-child {
+  font-size: 20px;
+  color: #fff;
+  text-shadow: 1px 1px 2px #000, 2px 2px 4px #CC0000;
+}
+
+#fimJogo {
+  display: none;
+  /* display: grid; */
+  align-content: center;
+  justify-content: center;
+}
+
+#vencedor {
+  display: grid;
+  align-content: center;
+  justify-content: center;
+}
+
+#vencedor h2 {
+  text-align: center;
+  font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+  color: white;
+  font-size: 20px;
+  text-shadow: 1px 1px 2px #000;
+  padding: 5px 0;
+}
+
+#vencedor img {
+  width: 30%;
+  display: grid;
+  justify-self: center;
+  padding: 5px 0;
+}
+
+#vencedor button {
+  width: 60%;
+  justify-self: center;
+  background: none;
+  border: 1px solid #fff;
+  margin: 5px 0;
+  border-radius: 5px;
+  color: white;
+  height: 35px;
+  line-height: 35px;
+  padding: 0;
+  font-weight: bold;
+  box-shadow: 1px 1px 1px #0000009c;
+}
+
+#vencedor button:hover {
+  background: rgb(192, 78, 2);
+}
+
+#vencedor i {
+  line-height: 35px;
+  height: 35px;
+  margin: 0;
+  padding: 0 0 0 5px;
+  float: left;
+}
+
+@media (min-width: 576px) {}
+
+@media (min-width: 768px) {}
+
+@media (min-width: 992px) {}
+
+@media (min-width: 1200px) {}

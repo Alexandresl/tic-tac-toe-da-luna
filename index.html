@@ -5,58 +5,140 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Tic-Tac-Toe da Luna</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-  <link rel="stylesheet" href="./style/style.css">
+  <title>Tic-Tac-Toe do Show da Luna</title>
+  <link rel="apple-touch-icon" sizes="57x57" href="assets/images/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="assets/images/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="assets/images/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="assets/images/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="assets/images/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="assets/images/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="assets/images/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="assets/images/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/images/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="assets/images/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+  <meta name="theme-color" content="#C2A3FF">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles/animate.css">
+  <link rel="stylesheet" href="assets/styles/style.css">
 </head>
 
 <body>
-  <div class="container">
-    <header>
-      <div class="Badge">Tic-Tac-Toe da Luna</div>
-    </header>
-    <div id="whoStarts"></div>
-    <div id="whoPlay"></div>
-    <div id="whoWin"></div>
-    <div class="buttonFunctions">
-      <div id="buttonGroup">
-        <button class="audioElOn" onclick="toggleAudio()" onmouseover="playEffectHomeFunc()"></button>
-        <button class="machineEl" onmouseover="playEffectHomeFunc()"></button>
-        <button class="levelEl1" onclick="level()" onmouseover="playEffectHomeFunc()"></button>
-        <button class="playEl disabled" onclick="start()" disabled ></button>
-      </div>
+  <div id="intro">
+    <div class="intro-logo">
+      <img src="./assets/images/logo.png" alt="Logo Tic-Tac-Toe do Show da Luna">
     </div>
-    <div class="content">
-      <div id="selectCharacter">
-        <h2>Selecione seu personagem:</h2>
-        <div class="character">
-          <img src="assets/images/jogador1luna.png" id="luna" onclick="start(this.id)" onmouseover="playEffectHomeFunc()">
-          <img src="assets/images/jogador2luna.png" id="claudio" onclick="start(this.id)" onmouseover="playEffectHomeFunc()">
-        </div>
-      </div>
-      <table id="board">
-        <tr>
-          <td id="cel1" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
-          <td id="cel2" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
-          <td id="cel3" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
-        </tr>
-        <tr>
-          <td id="cel4" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
-          <td id="cel5" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
-          <td id="cel6" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
-        </tr>
-        <tr>
-          <td id="cel7" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
-          <td id="cel8" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
-          <td id="cel9" onclick="play(this.id)"><img src="assets/images/jogador0.png" class="animated bounce faster"></td>
-        </tr>
-      </table>
+    <div class="intro-loader">
+      <img src="assets/images/loading.gif" alt="Carregando...">
     </div>
-    <footer>
-      Alexandre Lima
-    </footer>
+    <div class="intro-character">
+      <img src="./assets/images/Grupo 34.png" alt="">
+    </div>
+    <div class="intro-footer">
+      <p>Alexandre Lima</p>
+    </div>
   </div>
-  <script src="./assets/scripts/scripts.js"></script>
+  <div id="container">
+    <main>
+      <header></header>
+      <div id="messages">
+        <p id="whoPlayer">Selecione o personagem:</p>
+        <p id="whoStarts"></p>
+        <p id="whoPlay"></p>
+        <p id="whoWin"></p>
+      </div>
+      <section>
+        <div id="board">
+          <div id="selectCharacter">
+            <ul>
+              <li><img src="assets/images/jogador1luna.png" id="luna" onclick="start(this.id)"
+                  onmouseover="playEffectHomeFunc()" alt="Clique para selecionar a Luna"></li>
+              <li><img src="assets/images/jogador2luna.png" id="claudio" onclick="start(this.id)"
+                  onmouseover="playEffectHomeFunc()" alt="Clique para selecionar o Cláudio"></li>
+            </ul>
+          </div>
+          <table id="tableEl">
+            <tr>
+              <td id="cel1" onclick="play(this.id)"><img src="assets/images/jogador0.png"
+                  class="animated bounce faster"></td>
+              <td id="cel2" onclick="play(this.id)"><img src="assets/images/jogador0.png"
+                  class="animated bounce faster"></td>
+              <td id="cel3" onclick="play(this.id)"><img src="assets/images/jogador0.png"
+                  class="animated bounce faster"></td>
+            </tr>
+            <tr>
+              <td id="cel4" onclick="play(this.id)"><img src="assets/images/jogador0.png"
+                  class="animated bounce faster"></td>
+              <td id="cel5" onclick="play(this.id)"><img src="assets/images/jogador0.png"
+                  class="animated bounce faster"></td>
+              <td id="cel6" onclick="play(this.id)"><img src="assets/images/jogador0.png"
+                  class="animated bounce faster"></td>
+            </tr>
+            <tr>
+              <td id="cel7" onclick="play(this.id)"><img src="assets/images/jogador0.png"
+                  class="animated bounce faster"></td>
+              <td id="cel8" onclick="play(this.id)"><img src="assets/images/jogador0.png"
+                  class="animated bounce faster"></td>
+              <td id="cel9" onclick="play(this.id)"><img src="assets/images/jogador0.png"
+                  class="animated bounce faster"></td>
+            </tr>
+          </table>
+          <div id="fimJogo">
+            <div id="vencedor">
+              <h2></h2>
+              <img src="" alt="">
+              <button id="btnChangeCharacter" onclick="changeCharacter()">
+                <i class="material-icons">people</i> Trocar personagem
+              </button>
+              <button id="btnRestart" onclick="theEndRestart()">
+                <i class="material-icons"  >undo</i> Jogar novamente
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="controls">
+        <ul>
+          <li>Som</li>
+          <li class="button">
+            <i class="material-icons" id="audioOnOff" onclick="toggleAudio()">volume_up</i>
+          </li>
+        </ul>
+        <ul>
+          <li id="labelCPU">CPU</li>
+          <li class="button">
+            <i id="computerOnOff" onclick="togglePlayer()" class="material-icons">computer</i>
+          </li>
+        </ul>
+        <ul id="ulNivel">
+          <li>Nível</li>
+          <li>
+            <select name="level" onchange="changeLevel(this.value)">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </li>
+        </ul>
+        <ul id="ulPlay">
+          <li id="labelPlay" class="disabled">Reiniciar</li>
+          <li id="play" onclick="restart()" class="button disabled"><i class="material-icons">play_circle_outline</i></li>
+        </ul>
+      </div>
+      <footer>
+        <ul>
+          <li>Alexandre Lima</li>
+        </ul>
+      </footer>
+    </main>
+  </div>
+  <script src="assets/script/script.js"></script>
 </body>
 
 </html>
