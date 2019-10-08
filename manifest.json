@@ -6,7 +6,7 @@
   "display": "fullscreen",
   "orientation": "portrait",
   "Scope": "/",
-  "start_url": "https://alexandrelima.dev/luna/",
+  //"start_url": "https://alexandrelima.dev/luna/",
   "icons": [
     {
       "src": "assets/images/icons/icon-72x72.png",

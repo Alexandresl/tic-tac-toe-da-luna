@@ -144,8 +144,8 @@ section {
 }
 
 #selectCharacter {
-  display: grid;
-  /* display: none; */
+  /* display: grid; */
+  display: none;
   justify-content: center;
   align-content: center;
   height: 100%;
@@ -173,8 +173,8 @@ section {
 }
 
 #board table {
-  /* display: grid; */
-  display: none;
+  display: grid;
+  /* display: none; */
   width: 270px;
   height: 270px;
 }

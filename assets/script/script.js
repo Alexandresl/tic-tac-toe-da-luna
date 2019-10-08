@@ -1,669 +1,282 @@
-// Variáveis
-let game; // situação do jogo
-let board; // situação da view
-let audioOnOff = true; // true = audio on | false = audio off
-let gameLevel = 1; // Guarda o nível de dificuldade
-let myCharacter; // meu Jogador
-let computerCharacter; // computador || outro player
-let machineOnOff = true; // Jogo contra a máquina -> on - true | off = false
-let inProgress; // verifica se o jogo está em andamento
-let totalMove; // Contador do números de jogadas
-let whoStarts; // 0 = jogador 1 = cpu
-let checkTheVictory; // verifica condição de vitória
-let whoPlays = 0; // 0 = jogador 1 = cpu
-let playEffectHome = audio = new Audio('./assets/audio/click1.wav'); // Audio da jogada
-let playMusic = audio = new Audio('./assets/audio/lunaMusic.mp3'); // Música de fundo
-let playEffect = audio = new Audio('./assets/audio/click.wav'); // Audio da jogada
+/**
+ * Objeto nodo:
+ * 
+    { father: ponteiro para nodo,    
+      state: array[3][3],
+      children: array de ponteiros para nodo,
+      player: char,
+      minimax: int }
+ */
 
-// Elementos
-let introEl = document.querySelector('#intro');
-let containerEl = document.querySelector('#container');
-let loaderEl = document.querySelector('.intro-loader');
-let selectCharacterEl = document.querySelector('#selectCharacter');
-let tableEl = document.querySelector('#tableEl');
-let cel1El = document.getElementById('cel1');
-let cel2El = document.getElementById('cel2');
-let cel3El = document.getElementById('cel3');
-let cel4El = document.getElementById('cel4');
-let cel5El = document.getElementById('cel5');
-let cel6El = document.getElementById('cel6');
-let cel7El = document.getElementById('cel7');
-let cel8El = document.getElementById('cel8');
-let cel9El = document.getElementById('cel9');
-let whoPlayerEl = document.getElementById('whoPlayer');
-let whoStartsEl = document.getElementById('whoStarts');
-let whoPlayEl = document.getElementById('whoPlay');
-let whoWinEl = document.getElementById('whoWin');
-let btnPlayEl = document.getElementById('play');
-let LabelPlayEl = document.getElementById('labelPlay');
-let ulNivelEl = document.getElementById('ulNivel');
-let fimJogoEl = document.getElementById('fimJogo');
-let vencedorEl = document.getElementById('vencedor');
-let ulPlayEl = document.getElementById('ulPlay')
+let state = []; // State do tabuleiro na tela
+let initial; // Primeiro nodo da árvore
+let current; // Ponteiro para o nodo que representa o estado atual do jogo
+let stack = []; // Array de ponteiros para o nodo - usada para construir a árvore
+let nodos = 0; // nodos na árvore
+let firstCharacter = 'x'; // Primeiro personagem
+let secondCharacter = 'o'; // Segundo personagem
 
-// Funções
+window.onload = function () {
+  initialize();
+};
 
-// Função para utilizar com o animate.css
-function animateCSS(element, animationName, callback) {
-  element.classList.add('animated', animationName);
-  function handleAnimationEnd() {
-    element.classList.remove('animated', animationName)
-    element.removeEventListener('animationend', handleAnimationEnd)
-    if (typeof callback === 'function') callback()
-  }
-  element.addEventListener('animationend', handleAnimationEnd)
+function initialize () {
+  state = [[], [], []];
+  initial = null;
+  current = null;
+  displayState(state);
 }
 
-// let loader = () => {
-//   setTimeout(() => {
-//     loaderEl.style.opacity = 1;
-//     animateCSS(loaderEl, 'flipInX', () => {
-//       setTimeout(() => {
-//         animateCSS(introEl, 'flipOutX');
-//       }, 6000);
-//     });
-//     setTimeout(() => {
-//       introEl.style.display = 'none';
-//       containerEl.style.display = 'block';
-//       animateCSS(container, 'fadeIn');
-//     }, 8000);
-//   }, 2000);
-// }
-
-let toggleAudio = () => {
-  audioOnOff = !audioOnOff;
-  let icon;
-  let el = document.getElementById('audioOnOff');
-  if (!audioOnOff) {
-    icon = 'volume_off';
-    el.innerHTML = icon;
-    playMusic.pause();
-  } else {
-    icon = 'volume_up';
-    el.innerHTML = icon;
-    playMusic.play();
+function generateTree() {
+  stack = []; // Limpa pilha
+  nodos = 0; // zera nodos
+  /**
+   * Gera nodo inicial a partir do estado do tabuleiro na
+   * tela (vazio ou com a primeira jogada)
+   */
+  initial = {
+    father: null,
+    state: state,
+    children: [],
+    player: firstCharacter,
+    minimax: null
   }
+  stack.push(initial); // Coloca nodo na pilha
+
+  while (stack.length) { // Enquanto houver elementos na pilha
+    nodo = stack.pop(); // Retira um nodo
+    generateChildren(nodo); // Gera filho deste nodo
+  }
+
+  calculateMinimax(initial); // Calcula valores minimax a partir da inicial
+  current = initial; // Situação current do jogo
 }
 
-let togglePlayer = () => {
-  machineOnOff = !machineOnOff;
-  let icon;
-  let el = document.getElementById('computerOnOff');
-  let label = document.getElementById('labelCPU');
-  if (!machineOnOff) {
-    icon = 'sports_kabaddi';
-    el.innerHTML = icon;
-    label.innerHTML = 'Jogador'
-    ulNivelEl.style.display = 'none';
-  } else {
-    icon = 'computer';
-    el.innerHTML = icon;
-    label.innerHTML = 'CPU'
-    ulNivelEl.style.display = 'block';
-  }
-}
+function generateChildren(father) {
+  let state = [];
+  let player = (father.player == secondCharacter) ? firstCharacter : secondCharacter; // Verifica de quem é a vez de jogar na rodada
 
-let play = (position) => {
-  if (inProgress && whoPlays === 0) {
-    switch (position) {
-      case 'cel1':
-        if (game[0][0] === "") {
-            game[0][0] = myCharacter;
-            whoPlays = 1;
-        }
-        break;
-      case 'cel2':
-        if (game[0][1] === "") {
-          game[0][1] = myCharacter;
-          whoPlays = 1;
-        }
-        break;
-      case 'cel3':
-        if (game[0][2] === "") {
-          game[0][2] = myCharacter;
-          whoPlays = 1;
-        }
-        break;
-      case 'cel4':
-        if (game[1][0] === "") {
-          game[1][0] = myCharacter;
-          whoPlays = 1;
-        }
-        break;
-      case 'cel5':
-        if (game[1][1] === "") {
-          game[1][1] = myCharacter;
-          whoPlays = 1;
-        }
-        break;
-      case 'cel6':
-        if (game[1][2] === "") {
-          game[1][2] = myCharacter;
-          whoPlays = 1;
-        }
-        break;
-      case 'cel7':
-        if (game[2][0] === "") {
-          game[2][0] = myCharacter;
-          whoPlays = 1;
-        }
-        break;
-      case 'cel8':
-        if (game[2][1] === "") {
-          game[2][1] = myCharacter;
-          whoPlays = 1;
-        }
-        break;
-      case 'cel9':
-        if (game[2][2] === "") {
-          game[2][2] = myCharacter;
-          whoPlays = 1;
-        }
-        break;
-    }
-    if (whoPlays === 1) {
-      checkTheVictory = verifyVictory();
-      console.log('checkTheVictory', checkTheVictory);      
-      totalMove++;
-      console.log('totalMove', totalMove);
-      updateBoard();
-      endGame();
-      cpuMoves();
-      updateWhoPlays();
-    }
-  } else if (inProgress && whoPlays === 1 && !machineOnOff) {
-    switch (position) {
-      case 'cel1':
-        if (game[0][0] === "") {
-          game[0][0] = computerCharacter;
-          whoPlays = 0;
-        }
-        break;
-      case 'cel2':
-        if (game[0][1] === "") {
-          game[0][1] = computerCharacter;
-          whoPlays = 0;
-        }
-        break;
-      case 'cel3':
-        if (game[0][2] === "") {
-          game[0][2] = computerCharacter;
-          whoPlays = 0;
-        }
-        break;
-      case 'cel4':
-        if (game[1][0] === "") {
-          game[1][0] = computerCharacter;
-          whoPlays = 0;
-        }
-        break;
-      case 'cel5':
-        if (game[1][1] === "") {
-          game[1][1] = computerCharacter;
-          whoPlays = 0;
-        }
-        break;
-      case 'cel6':
-        if (game[1][2] === "") {
-          game[1][2] = computerCharacter;
-          whoPlays = 0;
-        }
-        break;
-      case 'cel7':
-        if (game[2][0] === "") {
-          game[2][0] = computerCharacter;
-          whoPlays = 0;
-        }
-        break;
-      case 'cel8':
-        if (game[2][1] === "") {
-          game[2][1] = computerCharacter;
-          whoPlays = 0;
-        }
-        break;
-      case 'cel9':
-        if (game[2][2] === "") {
-          game[2][2] = computerCharacter;
-          whoPlays = 0;
-        }
-        break;
-    }
-    if (whoPlays === 0) {
-      checkTheVictory = verifyVictory();
-      console.log('checkTheVictory', checkTheVictory);
-      totalMove++;
-      console.log('totalMove', totalMove);
-      updateBoard();
-      endGame();
-      cpuMoves();
-      updateWhoPlays();
-    }
-  }
-}
-
-let cleanLastWin = () => {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      board[i][j].children[0].style.backgroundColor = '#FF6400';
-    }
-  }
-}
-
-let changeCharacter = () => {
-  cleanLastWin();
-  fimJogoEl.style.display = 'none';
-  selectCharacterEl.style.display = 'grid';
-}
-
-let theEndRestart = () => {
-  cleanLastWin();
-  fimJogoEl.style.display = 'none';
-  tableEl.style.display = 'grid';
-  player = (myCharacter === 'x') ? 'luna' : 'claudio';
-  start(player);
-}
-
-let restart = () => {
-  cleanLastWin();
-  player = (myCharacter === 'x') ? 'luna' : 'claudio';
-  start(player);
-}
-
-let playEffectHomeFunc = () => {
-  if (audioOnOff) {
-    playEffectHome.currentTime = 0;
-    playEffectHome.autoplay = true;
-    playEffectHome.preload = 'none';
-    let playPromise = playEffectHome.play();
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-      }).catch(error => {
-      });
-    }
-  }
-}
-
-let playEffectFunction = () => {
-  if (audioOnOff) {
-    playEffect.currentTime = 0;
-    let playPromise = playEffect.play();
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-      }).catch(error => {
-      });
-    }
-  }
-}
-
-let playbackAudio = () => {
-  console.log('playBackAudio')
-  if (audioOnOff) {
-    playMusic.currentTime = 0;
-    playMusic.loop = true;
-    playMusic.autoplay = true;
-    playMusic.preload = 'none';
-    let playPromise = playMusic.play();
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-      }).catch(error => {
-      });
-    }
-  }
-}
-
-/**
- * Altera a dificuldade a partir da 
- * seleção do usuário
- */
-let changeLevel = (value) => {
-  gameLevel = value;
-  console.log(gameLevel);  
-}
-
-/**
- * Define quem inicia
- */
-let firstPlayer = () => {
-  if (!whoStarts) {
-    return whoStarts = Math.floor(Math.random() * 2);
-  } else {
-    return whoStarts = (whoStarts === 0) ? 1 : 0;
-  }
-}
-
-let cpuMoves = () => {
-  if (inProgress === true && machineOnOff) {
-    setTimeout(() => {
-      let i, j;
-      if (gameLevel == 1) {
-        console.log('Entrou level 1');
-        
-        do {
-          i = Math.round(Math.random() * 2);
-          j = Math.round(Math.random() * 2);
-        } while (game[i][j]);
-        game[i][j] = computerCharacter;
-      } else if (gameLevel == 2) {
-        console.log('entrou level 2');
-        // Ataque
-        // Linha 1
-        if (game[0][0] === myCharacter && game[0][1] === myCharacter && game[0][2] === '') {
-          game[0][2] = computerCharacter;
-        } else if (game[0][0] === myCharacter && game[0][2] === myCharacter && game[0][1] === '') {
-          game[0][1] = computerCharacter;
-        } else if (game[0][1] === myCharacter && game[0][2] === myCharacter && game[0][0] === '') {
-          game[0][0] = computerCharacter;
-        } else if (game[1][0] === myCharacter && game[1][1] === myCharacter && game[1][2] === '') {
-          game[1][2] = computerCharacter;
-        } else if (game[1][0] === myCharacter && game[1][2] === myCharacter && game[1][1] === '') {
-          game[1][1] = computerCharacter;
-        } else if (game[1][1] === myCharacter && game[1][2] === myCharacter && game[1][0] === '') {
-          game[1][0] = computerCharacter;
-        } else if (game[2][0] === myCharacter && game[2][1] === myCharacter && game[2][2] === '') {
-          game[2][2] = computerCharacter;
-        } else if (game[2][0] === myCharacter && game[2][2] === myCharacter && game[2][1] === '') {
-          game[2][1] = computerCharacter;
-        } else if (game[2][1] === myCharacter && game[2][2] === myCharacter && game[2][0] === '') {
-          game[2][0] = computerCharacter;
-        } else if (game[0][0] === myCharacter && game[1][0] === myCharacter && game[2][0] === '') {
-          game[2][0] = computerCharacter;
-        } else if (game[0][0] === myCharacter && game[2][0] === myCharacter && game[1][0] === '') {
-          game[1][0] = computerCharacter;
-        } else if (game[1][0] === myCharacter && game[2][0] === myCharacter && game[0][0] === '') {
-          game[0][0] = computerCharacter;
-          //corrigir aqui
-        } else if (game[0][1] === myCharacter && game[1][1] === myCharacter && game[2][1] === '') {
-          game[2][1] = computerCharacter;
-        } else if (game[0][1] === myCharacter && game[2][1] === myCharacter && game[1][1] === '') {
-          game[1][1] = computerCharacter;
-        } else if (game[1][1] === myCharacter && game[2][1] === myCharacter && game[0][1] === '') {
-          game[0][1] = computerCharacter;
-        } else if (game[0][2] === myCharacter && game[1][2] === myCharacter && game[2][2] === '') {
-          game[2][2] = computerCharacter;
-        } else if (game[0][2] === myCharacter && game[2][2] === myCharacter && game[1][2] === '') {
-          game[1][2] = computerCharacter;
-        } else if (game[1][2] === myCharacter && game[2][2] === myCharacter && game[0][2] === '') {
-          game[0][2] = computerCharacter;
-        } else if (game[0][0] === myCharacter && game[1][1] === myCharacter && game[2][2] === '') {
-          game[2][2] = computerCharacter;
-        } else if (game[0][0] === myCharacter && game[2][2] === myCharacter && game[1][1] === '') {
-          game[1][1] = computerCharacter;
-        } else if (game[1][1] === myCharacter && game[2][2] === myCharacter && game[0][0] === '') {
-          game[0][0] = computerCharacter;
-        } else if (game[0][2] === myCharacter && game[1][1] === myCharacter && game[2][0] === '') {
-          game[2][0] = computerCharacter;
-        } else if (game[0][2] === myCharacter && game[2][0] === myCharacter && game[1][1] === '') {
-          game[1][1] = computerCharacter;
-        } else if (game[2][0] === myCharacter && game[1][1] === myCharacter && game[0][2] === '') {
-          game[0][2] = computerCharacter;
-        } else if (game[0][0] === computerCharacter && game[0][1] === computerCharacter && game[0][2] === '') {
-          game[0][2] = computerCharacter;
-        } else if (game[0][0] === computerCharacter && game[0][2] === computerCharacter && game[0][1] === '') {
-          game[0][1] = computerCharacter;
-        } else if (game[0][1] === computerCharacter && game[0][2] === computerCharacter && game[0][0] === '') {
-          game[0][0] = computerCharacter;
-        } else if (game[1][0] === computerCharacter && game[1][1] === computerCharacter && game[1][2] === '') {
-          game[1][2] = computerCharacter;
-        } else if (game[1][0] === computerCharacter && game[1][2] === computerCharacter && game[1][1] === '') {
-          game[1][1] = computerCharacter;
-        } else if (game[1][1] === computerCharacter && game[1][2] === computerCharacter && game[1][0] === '') {
-          game[1][0] = computerCharacter;
-        } else if (game[2][0] === computerCharacter && game[2][1] === computerCharacter && game[2][2] === '') {
-          game[2][2] = computerCharacter;
-        } else if (game[2][0] === computerCharacter && game[2][2] === computerCharacter && game[2][1] === '') {
-          game[2][1] = computerCharacter;
-        } else if (game[2][1] === computerCharacter && game[2][2] === computerCharacter && game[2][0] === '') {
-          game[2][0] = computerCharacter;
-        } else if (game[0][0] === computerCharacter && game[1][0] === computerCharacter && game[2][0] === '') {
-          game[2][0] = computerCharacter;
-        } else if (game[0][0] === computerCharacter && game[2][0] === computerCharacter && game[1][0] === '') {
-          game[1][0] = computerCharacter;
-        } else if (game[1][0] === computerCharacter && game[2][0] === computerCharacter && game[0][0] === '') {
-          game[0][0] = computerCharacter;
-        } else if (game[0][1] === computerCharacter && game[1][1] === computerCharacter && game[2][1] === '') {
-          game[2][1] = computerCharacter;
-        } else if (game[0][1] === computerCharacter && game[2][1] === computerCharacter && game[1][1] === '') {
-          game[1][1] = computerCharacter;
-        } else if (game[1][1] === computerCharacter && game[2][1] === computerCharacter && game[0][1] === '') {
-          game[0][1] = computerCharacter;
-        } else if (game[0][2] === computerCharacter && game[1][2] === computerCharacter && game[2][2] === '') {
-          game[2][2] = computerCharacter;
-        } else if (game[0][2] === computerCharacter && game[2][2] === computerCharacter && game[1][2] === '') {
-          game[1][2] = computerCharacter;
-        } else if (game[1][2] === computerCharacter && game[2][2] === computerCharacter && game[0][2] === '') {
-          game[0][2] = computerCharacter;
-        } else if (game[0][0] === computerCharacter && game[1][1] === computerCharacter && game[2][2] === '') {
-          game[2][2] = computerCharacter;
-        } else if (game[0][0] === computerCharacter && game[2][2] === computerCharacter && game[1][1] === '') {
-          game[1][1] = computerCharacter;
-        } else if (game[1][1] === computerCharacter && game[2][2] === computerCharacter && game[0][0] === '') {
-          game[0][0] = computerCharacter;
-        } else if (game[0][2] === computerCharacter && game[1][1] === computerCharacter && game[2][0] === '') {
-          game[2][0] = computerCharacter;
-        } else if (game[0][2] === computerCharacter && game[2][0] === computerCharacter && game[1][1] === '') {
-          game[1][1] = computerCharacter;
-        } else if (game[2][0] === computerCharacter && game[1][1] === computerCharacter && game[0][2] === '') {
-          game[0][2] = computerCharacter;
-        } else {
-          if (totalMove < 8) {
-            do {
-              i = Math.round(Math.random() * 2);
-              j = Math.round(Math.random() * 2);
-            } while (game[i][j]);
-            game[i][j] = computerCharacter;
-          } else {
-            for (let i = 0; i < 3; i++) {
-              for (let j = 0; j < 3; j++) {
-                if (game[i][j] == '') {
-                  game[i][j] = computerCharacter;
-                }
-              }
-            }
-          }
+      if (father.state[i][j] == undefined) { // Se encontrou espaço vago no tabuleiro
+        state = copyState(father.state); // Gera uma cópia do estado atual
+        state[i][j] = player; // Adiciona a jogada
+        let nodo = { // Cria um novo nodo para o filho
+          father: father,
+          state: state,
+          children: [],
+          player: player,
+          minimax: null
         }
-      } else {
-        // Não implementado
-        console.log('level 3 não implementado'); 
+        nodo.minimax = itsTerminal(nodo.state, 0); // Se for nodo terminal, recebe valor de utility
+        father.children.push(nodo); // adiciona esse nodo no array de children do nodo pai
+        nodos++; // incrementa o número de nodos
+
+        if (!nodo.minimax) { // Se o filho não é terminal, vai para a pilha, para gerar os filhos dele
+          stack.push(nodo);
+        }
       }
-      checkTheVictory = verifyVictory();
-      totalMove++;
-      console.log('totalMove', totalMove);
-      updateBoard();
-      endGame();
-      whoPlays = 0;
-      updateWhoPlays();
-    }, Math.random() * 2000);
+    }
   }
 }
 
-let updateWhoPlays = () => {
-  if (totalMove !== 0) {
-    whoStartsEl.style.display = 'none';
-    whoWinEl.style.display = 'none';
-    whoPlayEl.style.display = 'block';
-    if (machineOnOff) {
-      if (whoPlays === 0 && myCharacter === 'x' || whoPlays === 0 && myCharacter === 'o') {
-        whoPlayEl.innerHTML = 'Quem joga: Você';
-      } else {
-        whoPlayEl.innerHTML = 'Quem joga: Computador'
+function calculateMinimax(nodo) { // Calcula o valor minimax de um nodo
+  let i, min, max;
+
+  for (i = 0; i < nodo.children.length; i++) { // Percorre todos os filhos do nodo
+    if (nodo.children[i].minimax === null) { // Se um filho ainda não tem um valor minimax (não é folha da árvore)
+      calculateMinimax(nodo.children[i]); // Chama a função recursivamente para aquele filho
+    }
+    if (max == undefined || nodo.children[i].minimax > max) { // Guarda o valor max (maior minimax entre os filhos)
+      max = nodo.children[i].minimax;
+    }
+    if (min == undefined || nodo.children[i].minimax < min) { // Guarda o valor minn (menor minimax entre os filhos)
+      min = nodo.children[i].minimax;
+    }
+  }
+  if (nodo.player == firstCharacter) {
+    nodo.minimax = max; // Se a próxima jogada é da CPU, retorna valor max
+  } else {
+    nodo.minimax = min; // Caso contrário, retorna valor min
+  }
+}
+
+/**
+ * - Verifica se o estado é terninal, retornando seu valor de utility
+ * - Retorna null caso não seja um estado terminal
+ * - closes = 0 para calcular o valor de utility durante a geração da árvore
+ * - closes = 1 para verificar se o estado do jogo é terminal
+ */
+function itsTerminal(state, closes) { 
+  let whites = 0; // Responsavel por guardar o número de casas em "branco"
+  let utility = null; // guarda o valor de utility
+
+  for (let y = 0; y < 3; y++) { // Testa linhas
+    if (state[y][0] != undefined && state[y][0] == state[y][1] && state[y][0] == state[y][2]) {
+      utility = (state[y][0] == secondCharacter) ? 1 : -1; // utility 1 para CPU e 0 para humano
+      break;
+    }
+  }
+
+  if (!utility) { // Verifica se não encontrou estado terminal no laço anterior
+    for (let x = 0; x < 3; x++) { // Testa colunas
+      if (state[0][x] != undefined && state[0][x] == state[1][x] && state[0][x] == state[2][x]) {
+        utility = (state[0][x] == secondCharacter) ? 1 : -1; // utility 1 para CPU e 0 para humano
+        break;
       }
+    }
+  }
+
+  if (!utility) { // Verifica se não encontrou estado termninal nos laços anteriores
+    if (state[1][1] != undefined && ( // Testa diagonais
+      (state[0][0] == state[1][1] && state[0][0] == state[2][2]) ||
+      (state[0][2] == state[1][1] && state[0][2] == state[2][0])
+    )) {
+      utility = (state[1][1] == secondCharacter) ? 1 : -1; // utility 1 para CPU e 0 para humano
+    }
+  }
+  
+  for (let i = 0; i < 3; i++) { // Conta as casas não jogadas
+    for (let j = 0; j < 3; j++) {
+      if (state[i][j] == undefined) {
+        whites++;
+      }
+    }
+  }
+
+  if (utility) { // Se achou um vencedor
+    if (closes) { // Se é para finalizar o jogo
+      if (utility > 0) { // utility > 0, venceu CPU
+        showMessage("CPU ganhou!", "Obrigado por jogar!");
+        initialize();
+      } else {
+        showMessage("Você ganhou!", "UUAAUUU!!!");
+        initialize();
+      }
+    } else { // Caso não seja para finalizar, retorna utility
+      /**
+       * Retorna o valor de utility - nó de casas vagas dá
+       * um peso maior, favorecendo a escolha da jogada vitoriosa 
+       * mais rápida.
+       */
+      return utility * (whites + 1);
+    }
+  } else { // Caso não tenha encontrado vencedor
+    if (!whites) { // Se não há mais casas vagas, então também é um estado terminal
+      if (closes) { // Se é para finalizar o jogo
+        showMessage("é empate novamente!", ':-;');
+        initialize();
+      } else { // Caso não seja para finalizar, irá retornar utility 0 (empate)
+        return 0;
+      }
+    } else { // Caso ainda tenha jogadas disponíveis, apenas irá retornar null
+      return null;
+    }
+  }
+}
+
+function playHuman(element) {
+  let i = Number(element[0]); // Pega linha a partir da id do elemento
+  let j = Number(element[1]); // Pega a coluna a partir da id do elemento
+  if (state[i][j] != undefined) { // garantir que a casa ainda não foi jogada
+    showMessage("Posição inválida!", i.toString() + ' = ' + j.toString());
+    return;
+  } else {
+    state[i][j] = firstCharacter; // Jogada do humano
+    displayState(state); // Atualizas o tabuleiro
+  }
+
+  if (!itsTerminal(state, 1)) { // Verifica se jogada do humano resultou em um state terminal
+    if (!initial) { // Se o primeiro nodo for Null, árvore ainda não foi gerada (humano começa o jogo)
+      generateTree(); // Initial é criado com o estado inicial, já com a jogada do humano
     } else {
-      let character
-      if (whoPlays === 0) {
-        console.log('entrou character 1', myCharacter);
-        
-        character = (myCharacter === 'x') ? 'Luna' : 'Cláudio';
-        whoPlayEl.innerHTML = 'Quem joga: '+ character;
-      } else {
-        console.log('entrou character 2', computerCharacter);
-        character = (computerCharacter === 'x') ? 'Luna' : 'Cláudio';
-        whoPlayEl.innerHTML = 'Quem joga: '+ character;
+      for (i = 0; i < current.children.length; i++) { // Procura nos children do state current, qual representa a situação após a jogada do humano
+        if (compareStates(state, current.children[i].state)) {
+          current = current.children[i];
+          break;
+        }
       }
     }
+    playCPU(); // Passa a vez para a CPU
   }
 }
 
-let endGame = () => {
-  console.log('endGame: ', checkTheVictory);
-  ulPlayEl.style.display = 'none';
-  /**
-   * Caso alguém tenha vencido
-   */
-  if (checkTheVictory !== '') {
+function playCPU() {
+  let max;
+  let options = [];
+  let r;
 
-    let win = (checkTheVictory === 'x') ? 'Luna' : 'Claudio';
-    setTimeout(() => {
-      whoPlayEl.style.display = 'none';
-      whoWinEl.style.display = 'block';
-      whoWinEl.innerHTML = win + ' ganhou!!!'
-      tableEl.style.display = 'none';
-      fimJogoEl.style.display = 'grid';
-      vencedorEl.children[0].innerHTML = 'Parabéns ' + win;
-      let winImg = (win === 'Luna') ? 'assets/images/luna-venceu.png' : 'assets/images/claudio-venceu.png'
-      vencedorEl.children[1].setAttribute('src', winImg);
-    }, 1000);
-    inProgress = false;
+  if (!initial) { // Se initial é null, árvore ainda não foi gerada (CPU começa o jogo)
+    generateTree();
   }
   /**
-   * Caso tenha empatado
+   * Avalia qual a melhor opção de jogada, dentre as possíveis (filhas do estado atual)
    */
-  if (checkTheVictory === '' && totalMove === 9) {
-     console.log('entrou endGame');     
-    setTimeout(() => {
-      whoPlayEl.style.display = 'none';
-      whoWinEl.style.display = 'block';
-      whoWinEl.innerHTML = 'O Jogo Empatou!!!';
-      tableEl.style.display = 'none';
-      fimJogoEl.style.display = 'grid';
-      vencedorEl.children[0].innerHTML = 'Bom jogo!'
-      vencedorEl.children[1].setAttribute('src', 'assets/images/Grupo 34.png')
-    }, 1000);
-    inProgress = false;
+  for (let i = 0; i < current.children.length; i++) {
+    if (current.children[i].minimax != null && (max == undefined || current.children[i].minimax > max)) {
+      max = current.children[i].minimax; // salva maior valor minimax dos filhos
+    }
   }
+
+  /**
+   * Percorre novamente o filhos, checando todos que tenham o mesmo valor minimas ótimo
+   */
+  for (let i = 0; i < current.children.length; i++) {
+    if (current.children[i].minimax == max) {
+      options.push(i); // coloca o índice deste filho no array de opções de jogadas
+    }
+  }
+  /**
+   * Escolha aleatóriamente um dos índices, para dar mais variedades às jogadas
+   */
+  r = Math.floor(Math.random() * options.length);
+  current = current.children[options[r]];
+  state = current.state;
+  displayState(state);
+
+itsTerminal(state, 1); // Verifica se atingiu o state terminal, finalizando o jogo
 }
 
-let updateBoard = () => {
+/**
+ * Funções de display
+ */
+
+function displayState(state) { // Atualiza o tabuleiro
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        element = document.getElementById(i.toString() + j.toString());
+        if (state[i][j] == undefined) {
+          element.children[0].src = 'assets\/images\/jogador0.png';
+        } else {
+          element.children[0].src = (state[i][j] == firstCharacter) ? 'assets\/images\/jogador1luna.png' : 'assets\/images\/jogador2luna.png';
+        }
+      }
+    }
+}
+
+function showMessage(msg, winner = '') {
+  console.log(msg + '\n' + winner);
+}
+
+/**
+ * funções auxiliares
+ */
+
+ function copyState(state) {
+  let newState = [];
+  for (let i = 0; i < state.length; i++) { // Copia elementos do array
+    newState[i] = state[i].slice(0); // Cecessário para evitar a cópia por referência
+  }
+  return newState;
+ }
+
+ function compareStates(state1, state2) {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      if (game[i][j] === 'x') {
-        board[i][j].style.backgroundColor = '#FF6400';
-        board[i][j].children[0].src = './assets/images/jogador1luna.png';
-        board[i][j].children[0].classList.add('animated', 'bounceIn', 'faster');
-        board[i][j].style.cursor = 'default';
-        playEffectFunction();
-      } else if (game[i][j] === 'o') {
-        board[i][j].style.backgroundColor = '#FF6400';
-        board[i][j].children[0].src = './assets/images/jogador2luna.png';
-        board[i][j].children[0].classList.add('animated', 'bounceIn', 'faster');
-        board[i][j].style.cursor = 'default';
-        playEffectFunction();
-      } else {
-        board[i][j].style.backgroundColor = '#FF6400';
-        board[i][j].children[0].src = './assets/images/jogador0.png';
-        board[i][j].style.background = 'none';
-        board[i][j].style.cursor = 'pointer';
+      if (state1[i][j] != state2[i][j]) {
+        return false;
       }
     }
   }
-}
-
-let verifyVictory = () => {
-  for (let i = 0; i < 3; i++) {
-    console.log('antes do if 1', 'player: ' + game[i][0], 'player: ' + game[i][1], 'player: ' + game[i][2]);
-    if (game[i][0] === game[i][1] && game[i][1] === game[i][2]) {
-      if (game[i][0] === 'x' || game[i][0] === 'o') {
-        board[i][0].children[0].style.backgroundColor = 'white';
-        board[i][1].children[0].style.backgroundColor = 'white';
-        board[i][2].children[0].style.backgroundColor = 'white';
-        console.log('verify 1', game[i][0]);
-        console.log(game[i][0], game[i][1], game[i][2]);
-        return game[i][0];
-      }
-    }
-  }
-  for (let j = 0; j < 3; j++) {
-    console.log('antes do if 2', 'player: ' + game[0][j], 'player: ' + game[1][j], 'player: ' + game[2][j]);
-    if (game[0][j] === game[1][j] && game[1][j] === game[2][j]) {
-      if (game[0][j] === 'x' || game[0][j] === 'o') {
-        board[0][j].children[0].style.backgroundColor = 'white';
-        board[1][j].children[0].style.backgroundColor = 'white';
-        board[2][j].children[0].style.backgroundColor = 'white';
-        console.log('verify 2', game[0][j]);
-        return game[0][j];
-      }
-    }
-  }
-  if (game[0][0] === game[1][1] && game[1][1] === game[2][2]) {
-    if (game[0][0] === 'x' || game[0][0] === 'o') {
-      board[0][0].children[0].style.backgroundColor = 'white';
-      board[1][1].children[0].style.backgroundColor = 'white';
-      board[2][2].children[0].style.backgroundColor = 'white';
-      console.log('verify 3');
-      return game[0][0];
-    }
-  }
-  if (game[0][2] === game[1][1] && game[1][1] === game[2][0]) {
-    if (game[0][2] === 'x' || game[0][2] === 'o') {
-      board[0][2].children[0].style.backgroundColor = 'white';
-      board[1][1].children[0].style.backgroundColor = 'white';
-      board[2][0].children[0].style.backgroundColor = 'white';
-      console.log('verify 4');
-      return game[0][2];
-    }
-  }
-  return '';
-}
-
-let start = (player) => {
-  console.log(player);
-  if (selectCharacterEl.style.display !== 'none') {
-    console.log('entrou aqui');
-    selectCharacterEl.style.display = 'none';
-    tableEl.style.display = 'grid';
-    animateCSS(tableEl, 'zoomInDown');
-  }
-  playbackAudio();
-  if (player) {
-    myCharacter = (player === 'luna') ? 'x' : 'o';
-    computerCharacter = (myCharacter === 'o') ? 'x' : 'o';
-  }
-  console.log('myCharacter: ', myCharacter);
-  console.log('computerCharacter: ', computerCharacter);
-  inProgress = true;
-  totalMove = 0;
-  whoStarts = firstPlayer();
-  console.log('Quem começa: ', whoStarts);
-  game = [
-    ['', '', ''],
-    ['', '', ''],
-    ['', '', '']
-  ];
-  board = [
-    [cel1El, cel2El, cel3El],
-    [cel4El, cel5El, cel6El],
-    [cel7El, cel8El, cel9El]
-  ];
-  updateBoard();
-  whoPlayerEl.style.display = 'none';
-  whoPlayEl.style.display = 'none';
-  whoWinEl.style.display = 'none';
-  if (whoStarts === 0 && myCharacter === 'x' || whoStarts === 0 && myCharacter === 'o' ) {
-    whoPlays = whoStarts;
-    whoStartsEl.style.display = 'block';
-    whoStartsEl.innerHTML = 'Você inicia!';
-  } else {
-    whoPlays = whoStarts;
-    whoStartsEl.style.display = 'block';
-    whoStartsEl.innerHTML = "Computador inicia!";
-    cpuMoves();
-  }
-  activeButtonPlay();
-}
-
-let activeButtonPlay = () => {
-  btnPlayEl.removeAttribute('disabled');
-  btnPlayEl.classList.remove('disabled');
-  LabelPlayEl.classList.remove('disabled');
-}
-
-// document.addEventListener('DOMContentLoaded', loader(), false);
+  return true;
+ }
