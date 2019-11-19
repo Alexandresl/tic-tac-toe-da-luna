@@ -326,6 +326,9 @@ function gameOver(end) {
 }
 
 function playHuman(element) {
+  
+  let playerForHuman = 1;
+  console.log(playerForHuman);
   let i = Number(element[0]); // Pega linha a partir da id do elemento
   let j = Number(element[1]); // Pega a coluna a partir da id do elemento
   if (state[i][j] != undefined) {
@@ -333,7 +336,7 @@ function playHuman(element) {
     showMessage("Posição inválida!");
     return;
   } else {
-    state[i][j] = firstCharacter[0]; // Jogada do humano
+    state[i][j] = (playerForHuman == 1) ? firstCharacter[0] : firstCharacter[1]; // Jogada do humano
     displayState(state); // Atualizas o tabuleiro
   }
 
@@ -352,13 +355,17 @@ function playHuman(element) {
       }
     }
     atualizeWhoPlay(); // Atualiza e coloca na tela quem joga
-    !end && !twoPlayers ? playCPU() : playSecondPlayer(); // Passa a vez para a CPU
+    
+    if (!end && !twoPlayers) {
+      playCPU()
+    } else {
+      playerForHuman = (playerForHuman == 1) ? 2 : 1;
+    }
+    
+      
   }
 }
 
-function playSecondPlayer() {
-  console.log("entrou!");
-}
 
 function playCPU() {
   let max;
@@ -402,7 +409,7 @@ function playCPU() {
     if (end === null) {
       atualizeWhoPlay(); // Atualiza e coloca na tela quem joga
     }
-  }, Math.random() * 2000);
+  }, Math.random() * 500);
 }
 
 function changeCharacter() {
@@ -480,7 +487,7 @@ function copyState(state) {
   let newState = [];
   for (let i = 0; i < state.length; i++) {
     // Copia elementos do array
-    newState[i] = state[i].slice(0); // Cecessário para evitar a cópia por referência
+    newState[i] = state[i].slice(0); // Necessário para evitar a cópia por referência
   }
   return newState;
 }
@@ -560,6 +567,8 @@ let playSoundEffect = () => {
     }
   }
 };
+
+
 
 /**
  * Função para uso da biblioteca animate.css
