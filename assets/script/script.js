@@ -25,6 +25,7 @@ let twoPlayers = false; // Se true o jogo é entre dois jogadores se false é co
 let playEffectHome = (audio = new Audio("./assets/audio/click1.wav")); // Audio de seleção
 let playMusic = (audio = new Audio("./assets/audio/lunaMusic.mp3")); // Música de fundo
 let playEffect = (audio = new Audio("./assets/audio/click.wav")); // Audio da jogada
+let playerForHuman = 1; // Quando jogo com dois humanos, alterna 1 primeiro jogador e 2
 
 /**
  * Elementos do DOM
@@ -327,7 +328,7 @@ function gameOver(end) {
 
 function playHuman(element) {
   
-  let playerForHuman = 1;
+  
   console.log(playerForHuman);
   let i = Number(element[0]); // Pega linha a partir da id do elemento
   let j = Number(element[1]); // Pega a coluna a partir da id do elemento
@@ -336,7 +337,7 @@ function playHuman(element) {
     showMessage("Posição inválida!");
     return;
   } else {
-    state[i][j] = (playerForHuman == 1) ? firstCharacter[0] : firstCharacter[1]; // Jogada do humano
+    state[i][j] = (playerForHuman == 1) ? firstCharacter[0] : secondCharacter[1]; // Jogada do humano
     displayState(state); // Atualizas o tabuleiro
   }
 
