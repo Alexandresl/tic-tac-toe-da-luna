@@ -25,7 +25,7 @@ let twoPlayers = false; // Se true o jogo é entre dois jogadores se false é co
 let playEffectHome = (audio = new Audio("./assets/audio/click1.wav")); // Audio de seleção
 let playMusic = (audio = new Audio("./assets/audio/lunaMusic.mp3")); // Música de fundo
 let playEffect = (audio = new Audio("./assets/audio/click.wav")); // Audio da jogada
-let playerForHuman = 1; // Quando jogo com dois humanos, alterna 1 primeiro jogador e 2
+let totalMove = 0;
 
 /**
  * Elementos do DOM
@@ -51,11 +51,20 @@ function start(player) {
   initialize();
 }
 
+/**
+ * Altera a dificuldade a partir da
+ * seleção do usuário
+ */
+let changeLevel = value => {
+  level = value;
+  console.log(level);
+};
+
 function selectCharacter(player) {
   firstCharacter[0] = player === "luna" ? "x" : "o";
   firstCharacter[1] = player === "luna" ? lunaCharacter : claudioCharacter;
   firstCharacter[2] = player == "luna" ? "Luna" : "Cláudio";
-  secondCharacter[0] = player === "luna" ? "o" : "x";
+  secondCharacter[0] = firstCharacter[0] === "x" ? "o" : "x";
   secondCharacter[1] = player === "luna" ? claudioCharacter : lunaCharacter;
   secondCharacter[2] = player === "luna" ? "Cláudio" : "Luna";
 }
@@ -64,9 +73,7 @@ function transitionForTable() {
   if (selectCharacterEl.getElementsByClassName.display !== "none") {
     selectCharacterEl.style.display = "none";
     tableEl.style.display = "grid";
-    animateCSS(tableEl, "zoomInDown");
-    ulPlayEl.classList.remove("disabled");
-    animateCSS(ulPlayEl, "zoomInDown");
+    animateCSS(tableEl, "fadeIn");
   }
 }
 
@@ -152,15 +159,52 @@ function calculateMinimax(nodo) {
       // Se um filho ainda não tem um valor minimax (não é folha da árvore)
       calculateMinimax(nodo.children[i]); // Chama a função recursivamente para aquele filho
     }
-    if (max == undefined || nodo.children[i].minimax > max) {
-      // Guarda o valor max (maior minimax entre os filhos)
-      max = nodo.children[i].minimax;
-    }
-    if (min == undefined || nodo.children[i].minimax < min) {
-      // Guarda o valor minn (menor minimax entre os filhos)
-      min = nodo.children[i].minimax;
+    if (level == 3) {
+      // Pega apenas as melhores jogadas
+      if (max == undefined || nodo.children[i].minimax > max) {
+        // Guarda o valor max (maior minimax entre os filhos)
+        max = nodo.children[i].minimax;
+      }
+      if (min == undefined || nodo.children[i].minimax < min) {
+        // Guarda o valor minn (menor minimax entre os filhos)
+        min = nodo.children[i].minimax;
+      }
+    } else if (level == 2) {
+      // Level 2 sorteia entre boas jogadas e jogadas ruins
+      level2 = Math.floor(Math.random() * 2);
+
+      if (level2 == 1) {
+        if (max == undefined || nodo.children[i].minimax > max) {
+          // Guarda o valor max (maior minimax entre os filhos)
+          max = nodo.children[i].minimax;
+        }
+        if (min == undefined || nodo.children[i].minimax < min) {
+          // Guarda o valor minn (menor minimax entre os filhos)
+          min = nodo.children[i].minimax;
+        }
+      } else {
+        if (max == undefined || nodo.children[i].minimax < max) {
+          // Guarda o valor max (maior minimax entre os filhos)
+          max = nodo.children[i].minimax;
+        }
+        if (min == undefined || nodo.children[i].minimax > min) {
+          // Guarda o valor minn (menor minimax entre os filhos)
+          min = nodo.children[i].minimax;
+        }
+      }
+    } else if (level == 1) {
+      // Pega jogadas ruins
+      if (max == undefined || nodo.children[i].minimax < max) {
+        // Guarda o valor max (maior minimax entre os filhos)
+        max = nodo.children[i].minimax;
+      }
+      if (min == undefined || nodo.children[i].minimax > min) {
+        // Guarda o valor minn (menor minimax entre os filhos)
+        min = nodo.children[i].minimax;
+      }
     }
   }
+
   if (nodo.player == firstCharacter[0]) {
     nodo.minimax = max; // Se a próxima jogada é da CPU, retorna valor max
   } else {
@@ -223,7 +267,8 @@ function itsTerminal(state, closes) {
     // Verifica se não encontrou estado termninal nos laços anteriores
     if (
       state[1][1] != undefined && // Testa diagonais
-      (state[0][0] == state[1][1] && state[0][0] == state[2][2])
+      state[0][0] == state[1][1] &&
+      state[0][0] == state[2][2]
     ) {
       utility = state[1][1] == secondCharacter ? 1 : -1; // utility 1 para CPU e 0 para humano
       if (closes === 1) {
@@ -233,7 +278,8 @@ function itsTerminal(state, closes) {
       }
     } else if (
       state[1][1] != undefined && // Testa diagonais
-      (state[0][2] == state[1][1] && state[0][2] == state[2][0])
+      state[0][2] == state[1][1] &&
+      state[0][2] == state[2][0]
     ) {
       utility = state[1][1] == secondCharacter ? 1 : -1; // utility 1 para CPU e 0 para humano
       if (closes === 1) {
@@ -327,9 +373,6 @@ function gameOver(end) {
 }
 
 function playHuman(element) {
-  
-  
-  console.log(playerForHuman);
   let i = Number(element[0]); // Pega linha a partir da id do elemento
   let j = Number(element[1]); // Pega a coluna a partir da id do elemento
   if (state[i][j] != undefined) {
@@ -337,7 +380,7 @@ function playHuman(element) {
     showMessage("Posição inválida!");
     return;
   } else {
-    state[i][j] = (playerForHuman == 1) ? firstCharacter[0] : secondCharacter[1]; // Jogada do humano
+    state[i][j] = firstCharacter[0]; // Jogada do humano
     displayState(state); // Atualizas o tabuleiro
   }
 
@@ -356,17 +399,9 @@ function playHuman(element) {
       }
     }
     atualizeWhoPlay(); // Atualiza e coloca na tela quem joga
-    
-    if (!end && !twoPlayers) {
-      playCPU()
-    } else {
-      playerForHuman = (playerForHuman == 1) ? 2 : 1;
-    }
-    
-      
+    if (!end && !twoPlayers) playCPU(); // Passa a vez para a CPU
   }
 }
-
 
 function playCPU() {
   let max;
@@ -410,13 +445,12 @@ function playCPU() {
     if (end === null) {
       atualizeWhoPlay(); // Atualiza e coloca na tela quem joga
     }
-  }, Math.random() * 500);
+  }, Math.random() * 400);
 }
 
 function changeCharacter() {
   showMessage("Selecione seu personagem:");
   clearBackground();
-  ulPlayEl.classList.add("disabled");
   fimJogo.style.display = "none";
   animateCSS(fimJogo, "zoomInDown");
   selectCharacterEl.style.display = "grid";
@@ -424,15 +458,14 @@ function changeCharacter() {
 }
 
 function restart() {
-  clearBackground();
-  ulPlayEl.classList.add("disabled");
-  fimJogo.style.display = "none";
-  animateCSS(fimJogo, "zoomInDown");
-  ulPlayEl.classList.remove("disabled");
-  animateCSS(ulPlayEl, "zoomInDown");
-  tableEl.style.display = "grid";
-  animateCSS(tableEl, "zoomInDown");
-  initialize();
+  if (end != true || fimJogoEl.style.display == "grid") {
+    clearBackground();
+    fimJogo.style.display = "none";
+    animateCSS(fimJogo, "zoomInDown");
+    tableEl.style.display = "grid";
+    animateCSS(tableEl, "zoomInDown");
+    initialize();
+  }
 }
 
 function clearBackground() {
@@ -488,7 +521,7 @@ function copyState(state) {
   let newState = [];
   for (let i = 0; i < state.length; i++) {
     // Copia elementos do array
-    newState[i] = state[i].slice(0); // Necessário para evitar a cópia por referência
+    newState[i] = state[i].slice(0); // Cecessário para evitar a cópia por referência
   }
   return newState;
 }
@@ -524,12 +557,12 @@ function toggleAudio() {
   if (!audioOnOff) {
     icon = "volume_off";
     el.innerHTML = icon;
-    labelSomEl.innerHTML = "Som</br>Desligado</br>";
+
     playMusic.pause();
   } else {
     icon = "volume_up";
     el.innerHTML = icon;
-    labelSomEl.innerHTML = "Som</br>Ligado</br>";
+
     playMusic.play();
   }
 }
@@ -568,8 +601,6 @@ let playSoundEffect = () => {
     }
   }
 };
-
-
 
 /**
  * Função para uso da biblioteca animate.css

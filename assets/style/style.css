@@ -1,16 +1,11 @@
 @font-face {
   font-family: "wildma";
-  src: url('../fonts/WILDMA__.TTF');
+  src: url("../fonts/WILDMA__.TTF");
 }
 
 * {
   margin: 0;
   padding: 0;
-}
-
-html {
-  width: 100%;
-  height: 100vh;
 }
 
 ul {
@@ -20,124 +15,66 @@ ul {
 body {
   width: 100%;
   height: 100vh;
-  min-height: 643px;
-  background-color: #C2A3FF;
+  background-color: #c2a3ff;
   background-image: url("../images/background.jpg");
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
   background-size: cover;
-  overflow: hidden;
-}
-
-/*----[ Intro ]----*/
-
-#intro {
-  height: 96vh;
-  padding: 2vh 0;
-  display: grid;
+  display: flex;
+  align-items: top;
   justify-content: center;
-  display: none;
 }
-
-.intro-logo>img {
-  width: 60vw;
-  max-width: 300px;
-}
-
-.intro-character img {
-  width: 60vw;
-  max-width: 300px;
-}
-
-.intro-footer p {
-  font-family: "wildma";
-  font-size: 50px;
-  color: #fff;
-  text-shadow: 2px 2px 3px #CC0000;
-  text-align: center;
-  max-height: 60px;
-}
-
-.intro-loader {
-  justify-content: center;
-  align-content: center;
-  max-height: 20px;
-  background: #ffffff88;
-  border-radius: 15px;
-  border: 2px solid #fff;
-  box-shadow: 0 0 2px #CC0000;
-  display: grid;
-  opacity: 0;
-}
-
-/*----[ Container ]----*/
 
 #container {
-  /* display: none; */
   width: 100vw;
+  height: 100vh;
+  min-height: 660px;
+  min-width: 323px;
 }
-
-main {
-  display: grid;
-  grid-template: 'header''messages''section''buttons''footer';
-  grid-template-rows: 25vh 10vh 40vh 15vh 10vh;
-  align-content: center;
-  justify-content: center;
-}
-
 
 header {
-  grid-area: header;
-  width: 100vw;
-  display: grid;
-  align-content: center;
-  justify-content: center;
-  background-image: url('../images/logocortado.png');
+  width: 100%;
+  height: 25vh;
+  background-image: url("../images/logocortado.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  align-items: top;
+  justify-content: center;
 }
 
 #messages {
-  grid-area: messages;
-  display: grid;
-  justify-content: center;
-  align-content: top;
-
+  width: 100%;
 }
 
-#messages>p {
-  background: #FFFEFD;
+#messages > p {
+  background: #fffefd;
   text-align: center;
-  width: 50vw;
+  width: 98%;
   height: 8vh;
   line-height: 8vh;
-  border: 1px solid #C2A3FF;
+  border: 1px solid inset #c2a3ff;
   border-radius: 10px;
-  font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Roboto", Verdana, Geneva, Tahoma, sans-serif;
   font-weight: bold;
   font-size: 0.9em;
-  color: #698F00;
+  color: #698f00;
   overflow: hidden;
-  text-shadow: 1px 1px 3px #C2A3FF;
+  text-shadow: 1px 1px 3px #c2a3ff;
   box-shadow: 0 3px 6px #0000007e;
-  min-width: 217px;
 }
 
 section {
-  display: grid;
-  width: 100vw;
-  align-self: center;
-  justify-self: center;
-  align-content: center;
+  width: 100%;
+  display: flex;
   justify-content: center;
-  grid-area: section;
+  margin-top: 5px;
 }
 
 #board {
   box-sizing: content-box;
-  background: #FF6400;
+  background: #ff6400;
   width: 270px;
   height: 270px;
   border: 5px solid #fff;
@@ -187,7 +124,7 @@ section {
 }
 
 #board td {
-  background: #FF6400;
+  background: #ff6400;
   width: 90px;
   height: 90px;
   display: inline-block;
@@ -203,11 +140,12 @@ section {
 .controls {
   grid-area: buttons;
   display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-columns: 33.33% 33.33% 33.33%;
   align-content: center;
   justify-content: center;
-  width: 60vw;
+  width: 100%;
   justify-self: center;
+  margin-top: 5px;
 }
 
 .material-icons {
@@ -223,7 +161,7 @@ section {
 
 .controls ul li {
   text-align: center;
-  font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Roboto", Verdana, Geneva, Tahoma, sans-serif;
   font-weight: bold;
   color: white;
   font-size: 14px;
@@ -233,7 +171,7 @@ section {
 .controls ul .button {
   width: 50px;
   height: 50px;
-  background: #FF6400;
+  background: #ff6400;
   border-radius: 50%;
   border: 3px solid #fff;
   box-sizing: border-box;
@@ -252,7 +190,7 @@ section {
 }
 
 .controls select {
-  background: #FF6400;
+  background: #ff6400;
   border: 3px solid #fff;
   border-radius: 25px;
   height: 50px;
@@ -275,7 +213,7 @@ footer {
   grid-area: footer;
   display: grid;
   text-align: center;
-  font-family: 'wildma', Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "wildma", Verdana, Geneva, Tahoma, sans-serif;
   font-weight: bold;
   color: #000;
   text-shadow: 1px 1px 1px #fff;
@@ -291,12 +229,11 @@ footer ul {
 footer ul li:last-child {
   font-size: 20px;
   color: #fff;
-  text-shadow: 1px 1px 2px #000, 2px 2px 4px #CC0000;
+  text-shadow: 1px 1px 2px #000, 2px 2px 4px #cc0000;
 }
 
 #fimJogo {
   display: none;
-  /* display: grid; */
   align-content: center;
   justify-content: center;
 }
@@ -309,7 +246,7 @@ footer ul li:last-child {
 
 #vencedor h2 {
   text-align: center;
-  font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Roboto", Verdana, Geneva, Tahoma, sans-serif;
   font-weight: bold;
   color: white;
   font-size: 20px;
@@ -323,6 +260,7 @@ footer ul li:last-child {
   display: grid;
   justify-self: center;
   padding: 5px 0;
+  margin: 20px 0 0 0;
 }
 
 #vencedor button {
@@ -352,10 +290,32 @@ footer ul li:last-child {
   float: left;
 }
 
-@media (min-width: 576px) {}
+@media (min-width: 375.98px) {
+  #container {
+    width: 80vw;
+  }
+}
 
-@media (min-width: 768px) {}
+@media (min-width: 575.98px) {
+  #container {
+    width: 75vw;
+  }
+}
 
-@media (min-width: 992px) {}
+@media (min-width: 767.98px) {
+  #container {
+    width: 50vw;
+  }
+}
 
-@media (min-width: 1200px) {}
+@media (min-width: 991.98px) {
+  #container {
+    width: 40vw;
+  }
+}
+
+@media (min-width: 1199.98px) {
+  #container {
+    width: 30vw;
+  }
+}

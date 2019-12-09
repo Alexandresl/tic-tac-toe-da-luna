@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Tic-Tac-Toe do Show da Luna</title>
+    <title>Tic Tac Toe da Luna</title>
     <link
       rel="apple-touch-icon"
       sizes="57x57"
@@ -86,163 +86,132 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/styles/animate.css" />
-    <link rel="stylesheet" href="assets/styles/style.css" />
+    <link rel="stylesheet" href="assets/style/animate.css" />
+    <link rel="stylesheet" href="assets/style/style.css" />
   </head>
-
   <body>
-    <div id="intro">
-      <div class="intro-logo">
-        <img
-          src="./assets/images/logo.png"
-          alt="Logo Tic-Tac-Toe do Show da Luna"
-        />
-      </div>
-      <div class="intro-loader">
-        <img src="assets/images/loading.gif" alt="Carregando..." />
-      </div>
-      <div class="intro-character">
-        <img src="./assets/images/Grupo 34.png" alt="" />
-      </div>
-      <div class="intro-footer">
-        <p>Alexandre Lima</p>
-      </div>
-    </div>
     <div id="container">
-      <main>
-        <header></header>
-        <div id="messages">
-          <p id="boxMessage"></p>
-        </div>
-        <section>
-          <div id="board">
-            <div id="selectCharacter">
-              <ul>
-                <li>
-                  <img
-                    src="assets/images/jogador1luna.png"
-                    id="luna"
-                    onclick="start(this.id)"
-                    onmouseover="soundEffectHome()"
-                    alt="Clique para selecionar a Luna"
-                  />
-                </li>
+      <header></header>
+      <div id="messages">
+        <p id="boxMessage"></p>
+      </div>
+      <section>
+        <div id="board">
+          <div id="selectCharacter">
+            <ul>
+              <li>
+                <img
+                  src="assets/images/jogador1luna.png"
+                  id="luna"
+                  onclick="start(this.id)"
+                  onmouseover="soundEffectHome()"
+                  alt="Clique para selecionar a Luna"
+                />
+              </li>
 
-                <li>
-                  <img
-                    src="assets/images/jogador2luna.png"
-                    id="claudio"
-                    onclick="start(this.id)"
-                    onmouseover="soundEffectHome()"
-                    alt="Clique para selecionar o Cláudio"
-                  />
-                </li>
-              </ul>
-            </div>
-            <table id="tableEl">
-              <tr>
-                <td id="00" onclick="playHuman(this.id)">
-                  <img
-                    src="assets/images/jogador0.png"
-                    class="animated bounce faster"
-                  />
-                </td>
+              <li>
+                <img
+                  src="assets/images/jogador2luna.png"
+                  id="claudio"
+                  onclick="start(this.id)"
+                  onmouseover="soundEffectHome()"
+                  alt="Clique para selecionar o Cláudio"
+                />
+              </li>
+            </ul>
+          </div>
+          <table id="tableEl">
+            <tr>
+              <td id="00" onclick="playHuman(this.id)">
+                <img
+                  src="assets/images/jogador0.png"
+                  class="animated bounce faster"
+                />
+              </td>
 
-                <td id="01" onclick="playHuman(this.id)">
-                  <img
-                    src="assets/images/jogador0.png"
-                    class="animated bounce faster"
-                  />
-                </td>
+              <td id="01" onclick="playHuman(this.id)">
+                <img
+                  src="assets/images/jogador0.png"
+                  class="animated bounce faster"
+                />
+              </td>
 
-                <td id="02" onclick="playHuman(this.id)">
-                  <img
-                    src="assets/images/jogador0.png"
-                    class="animated bounce faster"
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td id="10" onclick="playHuman(this.id)">
-                  <img
-                    src="assets/images/jogador0.png"
-                    class="animated bounce faster"
-                  />
-                </td>
+              <td id="02" onclick="playHuman(this.id)">
+                <img
+                  src="assets/images/jogador0.png"
+                  class="animated bounce faster"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td id="10" onclick="playHuman(this.id)">
+                <img
+                  src="assets/images/jogador0.png"
+                  class="animated bounce faster"
+                />
+              </td>
 
-                <td id="11" onclick="playHuman(this.id)">
-                  <img
-                    src="assets/images/jogador0.png"
-                    class="animated bounce faster"
-                  />
-                </td>
+              <td id="11" onclick="playHuman(this.id)">
+                <img
+                  src="assets/images/jogador0.png"
+                  class="animated bounce faster"
+                />
+              </td>
 
-                <td id="12" onclick="playHuman(this.id)">
-                  <img
-                    src="assets/images/jogador0.png"
-                    class="animated bounce faster"
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td id="20" onclick="playHuman(this.id)">
-                  <img
-                    src="assets/images/jogador0.png"
-                    class="animated bounce faster"
-                  />
-                </td>
+              <td id="12" onclick="playHuman(this.id)">
+                <img
+                  src="assets/images/jogador0.png"
+                  class="animated bounce faster"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td id="20" onclick="playHuman(this.id)">
+                <img
+                  src="assets/images/jogador0.png"
+                  class="animated bounce faster"
+                />
+              </td>
 
-                <td id="21" onclick="playHuman(this.id)">
-                  <img
-                    src="assets/images/jogador0.png"
-                    class="animated bounce faster"
-                  />
-                </td>
+              <td id="21" onclick="playHuman(this.id)">
+                <img
+                  src="assets/images/jogador0.png"
+                  class="animated bounce faster"
+                />
+              </td>
 
-                <td id="22" onclick="playHuman(this.id)">
-                  <img
-                    src="assets/images/jogador0.png"
-                    class="animated bounce faster"
-                  />
-                </td>
-              </tr>
-            </table>
+              <td id="22" onclick="playHuman(this.id)">
+                <img
+                  src="assets/images/jogador0.png"
+                  class="animated bounce faster"
+                />
+              </td>
+            </tr>
+          </table>
 
-            <div id="fimJogo">
-              <div id="vencedor">
-                <img src="" alt="" />
-                <button id="btnChangeCharacter" onclick="changeCharacter()">
-                  <i class="material-icons">people</i> Trocar personagem
-                </button>
-                <button id="btnRestart" onclick="restart()">
-                  <i class="material-icons">undo</i> Jogar novamente
-                </button>
-              </div>
+          <div id="fimJogo">
+            <div id="vencedor">
+              <img src="" alt="" />
+              <button id="btnChangeCharacter" onclick="changeCharacter()">
+                <i class="material-icons">people</i> Trocar personagem
+              </button>
+              <button id="btnRestart" onclick="restart()">
+                <i class="material-icons">undo</i> Jogar novamente
+              </button>
             </div>
           </div>
-        </section>
-        <div class="controls">
+        </div>
+      </section>
+      <div class="controls">
           <ul>
-            <li id="labelSom">Som</br>Ligado</br></li>
             <li class="button">
               <i class="material-icons" id="audioOnOff" onclick="toggleAudio()"
                 >volume_up</i
               >
             </li>
           </ul>
-          <ul>
-            <li id="labelCPU">Jogar com</br> o Computador</li>
-            <li class="button">
-              <i
-                id="computerOnOff"
-                onclick="togglePlayer()"
-                class="material-icons"
-                >computer</i
-              >
-            </li>
-          </ul>
+          
           <ul id="ulNivel">
-            <li>Nível</br>Fácil</br></li>
             <li>
               <select name="level" onchange="changeLevel(this.value)">
                 <option value="1">1</option>
@@ -251,8 +220,7 @@
               </select>
             </li>
           </ul>
-          <ul id="ulPlay" class="disabled">
-            <li id="labelPlay">Reiniciar</li>
+          <ul id="ulPlay">
             <li id="play" onclick="restart()" class="button">
               <i class="material-icons">play_circle_outline</i>
             </li>
@@ -265,6 +233,7 @@
         </footer>
       </main>
     </div>
-    <script src="assets/script/script.js"></script>
+    <script src="assets/scripts/script.js"></script>
+    </div>
   </body>
 </html>
