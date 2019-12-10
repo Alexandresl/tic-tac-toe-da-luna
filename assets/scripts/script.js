@@ -152,7 +152,8 @@ function generateChildren(father) {
 function calculateMinimax(nodo) {
   // Calcula o valor minimax de um nodo
   let i, min, max;
-
+  // Level 2 sorteia entre boas jogadas e jogadas ruins
+  level2 = Math.floor(Math.random() * 2);
   for (i = 0; i < nodo.children.length; i++) {
     // Percorre todos os filhos do nodo
     if (nodo.children[i].minimax === null) {
@@ -170,9 +171,6 @@ function calculateMinimax(nodo) {
         min = nodo.children[i].minimax;
       }
     } else if (level == 2) {
-      // Level 2 sorteia entre boas jogadas e jogadas ruins
-      level2 = Math.floor(Math.random() * 2);
-
       if (level2 == 1) {
         if (max == undefined || nodo.children[i].minimax > max) {
           // Guarda o valor max (maior minimax entre os filhos)
@@ -359,7 +357,7 @@ function gameOver(end) {
         ? "assets/images/luna-venceu.png"
         : "assets/images/claudio-venceu.png";
   } else if (end === -1) {
-    showMessage(secondCharacter[2] + " ganhou!");
+    showMessage(firstCharacter[2] + " ganhou!");
     fimJogoImgEl.src =
       firstCharacter[0] === "x"
         ? "assets/images/luna-venceu.png"
@@ -408,44 +406,42 @@ function playCPU() {
   let options = [];
   let r;
 
-  setTimeout(() => {
-    if (!initial) {
-      // Se initial é null, árvore ainda não foi gerada (CPU começa o jogo)
-      generateTree();
+  if (!initial) {
+    // Se initial é null, árvore ainda não foi gerada (CPU começa o jogo)
+    generateTree();
+  }
+  /**
+   * Avalia qual a melhor opção de jogada, dentre as possíveis (filhas do estado atual)
+   */
+  for (let i = 0; i < current.children.length; i++) {
+    if (
+      current.children[i].minimax != null &&
+      (max == undefined || current.children[i].minimax > max)
+    ) {
+      max = current.children[i].minimax; // salva maior valor minimax dos filhos
     }
-    /**
-     * Avalia qual a melhor opção de jogada, dentre as possíveis (filhas do estado atual)
-     */
-    for (let i = 0; i < current.children.length; i++) {
-      if (
-        current.children[i].minimax != null &&
-        (max == undefined || current.children[i].minimax > max)
-      ) {
-        max = current.children[i].minimax; // salva maior valor minimax dos filhos
-      }
-    }
+  }
 
-    /**
-     * Percorre novamente o filhos, checando todos que tenham o mesmo valor minimas ótimo
-     */
-    for (let i = 0; i < current.children.length; i++) {
-      if (current.children[i].minimax == max) {
-        options.push(i); // coloca o índice deste filho no array de opções de jogadas
-      }
+  /**
+   * Percorre novamente o filhos, checando todos que tenham o mesmo valor minimas ótimo
+   */
+  for (let i = 0; i < current.children.length; i++) {
+    if (current.children[i].minimax == max) {
+      options.push(i); // coloca o índice deste filho no array de opções de jogadas
     }
-    /**
-     * Escolha aleatóriamente um dos índices, para dar mais variedades às jogadas
-     */
-    r = Math.floor(Math.random() * options.length);
-    current = current.children[options[r]];
-    state = current.state;
-    displayState(state);
+  }
+  /**
+   * Escolha aleatóriamente um dos índices, para dar mais variedades às jogadas
+   */
+  r = Math.floor(Math.random() * options.length);
+  current = current.children[options[r]];
+  state = current.state;
+  displayState(state);
 
-    let end = itsTerminal(state, 1); // Verifica se atingiu o state terminal, finalizando o jogo
-    if (end === null) {
-      atualizeWhoPlay(); // Atualiza e coloca na tela quem joga
-    }
-  }, Math.random() * 400);
+  let end = itsTerminal(state, 1); // Verifica se atingiu o state terminal, finalizando o jogo
+  if (end === null) {
+    atualizeWhoPlay(); // Atualiza e coloca na tela quem joga
+  }
 }
 
 function changeCharacter() {
