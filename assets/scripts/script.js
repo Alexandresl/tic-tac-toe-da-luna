@@ -152,8 +152,7 @@ function generateChildren(father) {
 function calculateMinimax(nodo) {
   // Calcula o valor minimax de um nodo
   let i, min, max;
-  // Level 2 sorteia entre boas jogadas e jogadas ruins
-  level2 = Math.floor(Math.random() * 2);
+
   for (i = 0; i < nodo.children.length; i++) {
     // Percorre todos os filhos do nodo
     if (nodo.children[i].minimax === null) {
@@ -171,6 +170,9 @@ function calculateMinimax(nodo) {
         min = nodo.children[i].minimax;
       }
     } else if (level == 2) {
+      // Level 2 sorteia entre boas jogadas e jogadas ruins
+      level2 = Math.floor(Math.random() * 2);
+
       if (level2 == 1) {
         if (max == undefined || nodo.children[i].minimax > max) {
           // Guarda o valor max (maior minimax entre os filhos)
@@ -357,7 +359,7 @@ function gameOver(end) {
         ? "assets/images/luna-venceu.png"
         : "assets/images/claudio-venceu.png";
   } else if (end === -1) {
-    showMessage(firstCharacter[2] + " ganhou!");
+    showMessage(secondCharacter[2] + " ganhou!");
     fimJogoImgEl.src =
       firstCharacter[0] === "x"
         ? "assets/images/luna-venceu.png"
