@@ -406,42 +406,44 @@ function playCPU() {
   let options = [];
   let r;
 
-  if (!initial) {
-    // Se initial é null, árvore ainda não foi gerada (CPU começa o jogo)
-    generateTree();
-  }
-  /**
-   * Avalia qual a melhor opção de jogada, dentre as possíveis (filhas do estado atual)
-   */
-  for (let i = 0; i < current.children.length; i++) {
-    if (
-      current.children[i].minimax != null &&
-      (max == undefined || current.children[i].minimax > max)
-    ) {
-      max = current.children[i].minimax; // salva maior valor minimax dos filhos
+  setTimeout(() => {
+    if (!initial) {
+      // Se initial é null, árvore ainda não foi gerada (CPU começa o jogo)
+      generateTree();
     }
-  }
-
-  /**
-   * Percorre novamente o filhos, checando todos que tenham o mesmo valor minimas ótimo
-   */
-  for (let i = 0; i < current.children.length; i++) {
-    if (current.children[i].minimax == max) {
-      options.push(i); // coloca o índice deste filho no array de opções de jogadas
+    /**
+     * Avalia qual a melhor opção de jogada, dentre as possíveis (filhas do estado atual)
+     */
+    for (let i = 0; i < current.children.length; i++) {
+      if (
+        current.children[i].minimax != null &&
+        (max == undefined || current.children[i].minimax > max)
+      ) {
+        max = current.children[i].minimax; // salva maior valor minimax dos filhos
+      }
     }
-  }
-  /**
-   * Escolha aleatóriamente um dos índices, para dar mais variedades às jogadas
-   */
-  r = Math.floor(Math.random() * options.length);
-  current = current.children[options[r]];
-  state = current.state;
-  displayState(state);
 
-  let end = itsTerminal(state, 1); // Verifica se atingiu o state terminal, finalizando o jogo
-  if (end === null) {
-    atualizeWhoPlay(); // Atualiza e coloca na tela quem joga
-  }
+    /**
+     * Percorre novamente o filhos, checando todos que tenham o mesmo valor minimas ótimo
+     */
+    for (let i = 0; i < current.children.length; i++) {
+      if (current.children[i].minimax == max) {
+        options.push(i); // coloca o índice deste filho no array de opções de jogadas
+      }
+    }
+    /**
+     * Escolha aleatóriamente um dos índices, para dar mais variedades às jogadas
+     */
+    r = Math.floor(Math.random() * options.length);
+    current = current.children[options[r]];
+    state = current.state;
+    displayState(state);
+
+    let end = itsTerminal(state, 1); // Verifica se atingiu o state terminal, finalizando o jogo
+    if (end === null) {
+      atualizeWhoPlay(); // Atualiza e coloca na tela quem joga
+    }
+  }, Math.random() * 400);
 }
 
 function changeCharacter() {
